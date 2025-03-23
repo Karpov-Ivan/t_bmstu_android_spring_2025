@@ -1,25 +1,13 @@
+package com.example.t_bmstu_android_spring_2025
+
+import com.example.t_bmstu_android_spring_2025.interfaces.ReadableInLibrary
+import com.example.t_bmstu_android_spring_2025.interfaces.Returnable
+import com.example.t_bmstu_android_spring_2025.interfaces.TakeHomeable
+import com.example.t_bmstu_android_spring_2025.models.Book
+import com.example.t_bmstu_android_spring_2025.models.Newspaper
+import com.example.t_bmstu_android_spring_2025.models.Disk
+import com.example.t_bmstu_android_spring_2025.models.LibraryItem
 import java.util.Scanner
-
-// Базовый класс для объектов библиотеки
-abstract class LibraryItem(val id: Int, var isAvailable: Boolean, val name: String) {
-    abstract fun getDetailedInfo(): String
-    open fun getShortInfo(): String = "$name доступна: ${if (isAvailable) "Да" else "Нет"}"
-}
-
-// Класс для книг
-class Book(id: Int, isAvailable: Boolean, name: String, val pages: Int, val author: String) : LibraryItem(id, isAvailable, name) {
-    override fun getDetailedInfo(): String = "Книга: $name ($pages стр.) автора: $author с id: $id доступна: ${if (isAvailable) "Да" else "Нет"}"
-}
-
-// Класс для газет
-class Newspaper(id: Int, isAvailable: Boolean, name: String, val issueNumber: Int) : LibraryItem(id, isAvailable, name) {
-    override fun getDetailedInfo(): String = "Выпуск: $issueNumber газеты $name с id: $id доступен: ${if (isAvailable) "Да" else "Нет"}"
-}
-
-// Класс для дисков
-class Disk(id: Int, isAvailable: Boolean, name: String, val type: String) : LibraryItem(id, isAvailable, name) {
-    override fun getDetailedInfo(): String = "$type $name доступен: ${if (isAvailable) "Да" else "Нет"}"
-}
 
 fun main() {
     val scanner = Scanner(System.`in`)
@@ -76,47 +64,12 @@ fun manageItem(scanner: Scanner, item: LibraryItem) {
         println("5. Назад")
 
         when (scanner.nextInt()) {
-            1 -> takeHome(item)
-            2 -> readInLibrary(item)
+            1 -> if (item is TakeHomeable) item.takeHome() else println("Нельзя взять этот объект домой!")
+            2 -> if (item is ReadableInLibrary) item.readInLibrary() else println("Этот объект нельзя читать в зале!")
             3 -> println(item.getDetailedInfo())
-            4 -> returnItem(item)
+            4 -> if (item is Returnable) item.returnItem() else println("Этот объект нельзя вернуть!")
             5 -> return
             else -> println("Неверный ввод")
         }
     }
-}
-
-fun takeHome(item: LibraryItem) {
-    if (item !is Book && item !is Disk) {
-        println("Нельзя взять этот объект домой!")
-        return
-    }
-    if (!item.isAvailable) {
-        println("Этот объект уже занят!")
-        return
-    }
-    item.isAvailable = false
-    println("${item::class.simpleName} ${item.id} взят домой")
-}
-
-fun readInLibrary(item: LibraryItem) {
-    if (item !is Book && item !is Newspaper) {
-        println("Этот объект нельзя читать в зале!")
-        return
-    }
-    if (!item.isAvailable) {
-        println("Этот объект уже занят!")
-        return
-    }
-    item.isAvailable = false
-    println("${item::class.simpleName} ${item.id} взят в читальный зал")
-}
-
-fun returnItem(item: LibraryItem) {
-    if (item.isAvailable) {
-        println("Этот объект уже доступен, его нельзя вернуть!")
-        return
-    }
-    item.isAvailable = true
-    println("${item::class.simpleName} ${item.id} возвращен")
 }
