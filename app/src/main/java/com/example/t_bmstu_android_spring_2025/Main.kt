@@ -9,12 +9,13 @@ import com.example.t_bmstu_android_spring_2025.management.Manager
 import com.example.t_bmstu_android_spring_2025.models.Book
 import com.example.t_bmstu_android_spring_2025.models.Newspaper
 import com.example.t_bmstu_android_spring_2025.models.Disk
+import com.example.t_bmstu_android_spring_2025.models.DiskType
 import com.example.t_bmstu_android_spring_2025.models.LibraryItem
+import com.example.t_bmstu_android_spring_2025.models.MonthEnum
 import com.example.t_bmstu_android_spring_2025.shop.BookShop
 import com.example.t_bmstu_android_spring_2025.shop.DiskShop
-import com.example.t_bmstu_android_spring_2025.shop.NewspaperKiosk
+import com.example.t_bmstu_android_spring_2025.shop.NewspaperShop
 import com.example.t_bmstu_android_spring_2025.utils.filterByType
-import java.time.Month
 import java.util.Scanner
 
 @SuppressLint("NewApi")
@@ -25,8 +26,8 @@ fun main() {
 
     val items: MutableList<LibraryItem> = mutableListOf(
         Book(101, true, "Маугли", 202, "Редьярд Киплинг"),
-        Newspaper(201, true, "Сельская жизнь", 794, Month.FEBRUARY),
-        Disk(301, true, "Дэдпул и Росомаха", "DVD")
+        Newspaper(201, true, "Сельская жизнь", 794, MonthEnum.FEBRUARY),
+        Disk(301, true, "Дэдпул и Росомаха", DiskType.DVD)
     )
 
     while (true) {
@@ -42,7 +43,7 @@ fun main() {
                 println("Выберите магазин: 1. Книги, 2. Газеты, 3. Диски")
                 val purchased = when (scanner.nextInt()) {
                     1 -> manager.buy(BookShop())
-                    2 -> manager.buy(NewspaperKiosk())
+                    2 -> manager.buy(NewspaperShop())
                     3 -> manager.buy(DiskShop())
                     else -> null
                 }

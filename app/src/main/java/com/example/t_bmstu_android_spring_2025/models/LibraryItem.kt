@@ -4,3 +4,4 @@ abstract class LibraryItem(val id: Int, var isAvailable: Boolean, val name: Stri
     abstract fun getDetailedInfo(): String
     open fun getShortInfo(): String = "$name доступна: ${if (isAvailable) "Да" else "Нет"}"
 }
+
