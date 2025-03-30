@@ -1,0 +1,26 @@
+package com.example.t_bmstu_android_spring_2025.models
+
+import com.example.t_bmstu_android_spring_2025.interfaces.ReadableInLibrary
+import com.example.t_bmstu_android_spring_2025.interfaces.Returnable
+import java.time.Month
+
+class Newspaper(
+    id: Int,
+    isAvailable: Boolean,
+    name: String,
+    val issueNumber: Int,
+    val month: MonthEnum
+) : LibraryItem(id, isAvailable, name), ReadableInLibrary {
+
+    override fun getDetailedInfo(): String =
+        "Выпуск: $issueNumber газеты $name (${month}) с id: $id доступен: ${if (isAvailable) "Да" else "Нет"}"
+
+    override fun readInLibrary() {
+        if (!isAvailable) {
+            println("Этот объект уже занят!")
+            return
+        }
+        isAvailable = false
+        println("Газета $id взята в читальный зал")
+    }
+}
